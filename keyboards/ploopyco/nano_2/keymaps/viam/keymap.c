@@ -43,17 +43,9 @@ enum keymap_keycodes {
 };
 
 enum tap_dance_codes {
+    TD_DRAGSCROLL,
     TD_NANO_CLICK,
 };
-
-void nano_click_finished(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-       tap_code(X_MS_BTN1);   // single tap = left click
-    } else {
-       tap_code(X_MS_BTN2);   // double tap or more = right click
-    }
-}
-
 
 #include "common.c"
 
