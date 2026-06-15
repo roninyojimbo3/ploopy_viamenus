@@ -48,15 +48,12 @@ enum tap_dance_codes {
 
 void nano_click_finished(tap_dance_state_t *state, void *user_data) {
     if (state->count == 1) {
-        tap_code(KC_MS_BTN1);   // single tap = left click
+       tap_code(X_MS_BTN1);   // single tap = left click
     } else {
-        tap_code(KC_MS_BTN2);   // double tap or more = right click
+       tap_code(X_MS_BTN2);   // double tap or more = right click
     }
 }
 
-tap_dance_action_t tap_dance_actions[] = {
-    [TD_NANO_CLICK] = ACTION_TAP_DANCE_FN(nano_click_finished),
-};
 
 #include "common.c"
 
