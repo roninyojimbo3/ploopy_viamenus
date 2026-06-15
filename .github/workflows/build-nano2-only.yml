@@ -1,0 +1,42 @@
+name: Build Nano 2 Only
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: qmkfm/base_container:latest
+
+    steps:
+      - name: Checkout Userspace
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Mark repo safe
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Checkout QMK Firmware
+        uses: actions/checkout@v4
+        with:
+          repository: qmk/qmk_firmware
+          path: qmk_firmware
+          submodules: recursive
+
+      - name: Symlink userspace
+        run: |
+          mkdir -p qmk_firmware/users
+          ln -s "$GITHUB_WORKSPACE" qmk_firmware/users/viam
+
+      - name: Build Nano 2 viam
+        working-directory: qmk_firmware
+        run: qmk compile -kb ploopyco/nano_2/rev2_003 -km viam
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: nano2-viam-firmware
+          path: qmk_firmware/*.uf2
