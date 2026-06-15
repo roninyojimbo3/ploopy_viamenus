@@ -16,8 +16,10 @@ jobs:
       - name: Mark repo safe
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - name: Install QMK CLI
+      - name: Install QMK and ARM toolchain
         run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi
           python3 -m pip install --user qmk
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
