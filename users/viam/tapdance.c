@@ -18,15 +18,29 @@
         }
     #endif // BETTER_DRAGSCROLL_TAPDANCE
 
-    #if defined(NANO2_CLICK_TAPDANCE)
-        void nano_click_finished(tap_dance_state_t *state, void *user_data) {
-            if (state->count == 1) {
-                tap_code(MS_BTN1);   // single tap = left click
+#if defined(NANO2_CLICK_TAPDANCE)
+    static bool nano_dragging = false;
+
+    void nano_click_finished(tap_dance_state_t *state, void *user_data) {
+        if (state->count == 1) {
+            if (state->pressed) {
+                register_code(MS_BTN1);   // hold = hold left click for drag
+                nano_dragging = true;
             } else {
-                tap_code(MS_BTN2);   // double tap or more = right click
+                tap_code(MS_BTN1);        // single tap = left click
             }
+        } else {
+            tap_code(MS_BTN2);            // double tap or more = right click
         }
-    #endif // NANO2_CLICK_TAPDANCE
+    }
+
+    void nano_click_reset(tap_dance_state_t *state, void *user_data) {
+        if (nano_dragging) {
+            unregister_code(MS_BTN1);     // release left click after drag
+            nano_dragging = false;
+        }
+    }
+#endif // NANO2_CLICK_TAPDANCE
 
     tap_dance_action_t tap_dance_actions[] = {
         #if defined(BETTER_DRAGSCROLL_TAPDANCE) || defined(BETTER_DRAGSCROLL_TAPDANCE_FN_ADVANCE)
