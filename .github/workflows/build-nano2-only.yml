@@ -7,9 +7,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    container:
-      image: qmkfm/base_container:latest
-
     steps:
       - name: Checkout Userspace
         uses: actions/checkout@v4
@@ -18,6 +15,11 @@ jobs:
 
       - name: Mark repo safe
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Install QMK CLI
+        run: |
+          python3 -m pip install --user qmk
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Checkout QMK Firmware
         uses: actions/checkout@v4
