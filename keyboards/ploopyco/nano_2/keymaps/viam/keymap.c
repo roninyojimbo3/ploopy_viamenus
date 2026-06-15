@@ -1,21 +1,12 @@
 /* Copyright 2025 Plodah
  * Copyright 2021 Colin Lam (Ploopy Corporation)
- * Copyright 2020 Christopher Courtney, aka Drashna Jael're  (@drashna) <drashna@live.com>
+ * Copyright 2020 Christopher Courtney, aka Drashna Jael're (@drashna) <drashna@live.com>
  * Copyright 2019 Sunjun Kim
- * Copyright 2019 Hiroyuki Okada
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include QMK_KEYBOARD_H
@@ -25,7 +16,7 @@ enum layers {
 };
 
 enum keymap_keycodes {
-    KB_DPI_CONFIG       = QK_KB_0,
+    KB_DPI_CONFIG = QK_KB_0,
     KB_DRAG_SCROLL,
     BETTER_DRAG_SCROLL_MOMENTARY,
     BETTER_DRAG_SCROLL_TOGGLE,
@@ -51,10 +42,26 @@ enum keymap_keycodes {
     MOR_DSH,
 };
 
+enum tap_dance_codes {
+    TD_NANO_CLICK,
+};
+
+void nano_click_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        tap_code(KC_MS_BTN1);   // single tap = left click
+    } else {
+        tap_code(KC_MS_BTN2);   // double tap or more = right click
+    }
+}
+
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_NANO_CLICK] = ACTION_TAP_DANCE_FN(nano_click_finished),
+};
+
 #include "common.c"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
-        DRAG_SCROLL
+        TD(TD_NANO_CLICK)
     )
 };
