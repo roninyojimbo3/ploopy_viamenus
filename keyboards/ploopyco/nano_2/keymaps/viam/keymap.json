@@ -26,7 +26,7 @@
             "mousekey": true,
             "rgblight": false,
             "rgb_matrix": false,
-            "tap_dance": false,
+            "tap_dance": true,
             "via": true
         },
         "keyboard_name": "Trackball Nano 2 | viam",
